@@ -408,6 +408,36 @@ body.nav-open .menu-toggle span:last-child {
   max-width: 34rem;
 }
 
+.timeline-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-width: 42rem;
+}
+
+.timeline-list li {
+  position: relative;
+  padding-left: 1rem;
+  color: var(--ink-soft);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.timeline-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.65;
+}
+
 .education-meta {
   align-items: flex-start;
 }
