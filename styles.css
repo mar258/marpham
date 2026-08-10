@@ -352,28 +352,6 @@ body.nav-open .menu-toggle span:last-child {
   transform: scaleX(1);
 }
 
-.about-block {
-  position: relative;
-  max-width: 48rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--line);
-}
-
-.about-block .section-title {
-  margin-bottom: 1.25rem;
-}
-
-.about-block p {
-  margin: 0 0 1rem;
-  color: var(--ink-soft);
-  font-size: 1.05rem;
-  font-weight: 300;
-}
-
-.about-block p:last-child {
-  margin-bottom: 0;
-}
-
 /* ——— Experience ——— */
 
 .timeline {
