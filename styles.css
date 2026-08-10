@@ -149,13 +149,25 @@ img {
   height: 70%;
 }
 
-.sidebar-note {
-  margin-top: auto;
-  margin-bottom: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+.sidebar-links {
+  list-style: none;
+  margin: auto 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sidebar-links a {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
+  transition: color 0.25s var(--ease);
+}
+
+.sidebar-links a:hover {
+  color: var(--accent);
 }
 
 /* ——— Mobile menu ——— */
@@ -678,6 +690,10 @@ body.nav-open .menu-toggle span:last-child {
     font-size: 1.35rem;
     font-family: var(--font-display);
     padding-left: 0.85rem;
+  }
+
+  .mobile-nav .sidebar-links {
+    margin-top: auto;
   }
 
   .section {
