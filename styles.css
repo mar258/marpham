@@ -430,6 +430,46 @@ body.nav-open .menu-toggle span:last-child {
   max-width: 34rem;
 }
 
+.education-meta {
+  align-items: flex-start;
+}
+
+.education-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.education-school {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.education-degree {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.education-timeline {
+  gap: 3.5rem;
+}
+
+.education-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.education-details .timeline-copy {
+  max-width: 48rem;
+}
+
 /* ——— Projects ——— */
 
 .project-list {
