@@ -354,6 +354,19 @@ body.nav-open .menu-toggle span:last-child {
 
 /* ——— Experience ——— */
 
+.experience-group + .experience-group {
+  margin-top: 3rem;
+}
+
+.experience-subtitle {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
 .timeline {
   list-style: none;
   margin: 0;
