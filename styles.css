@@ -485,11 +485,56 @@ body.nav-open .menu-toggle span:last-child {
 
 /* ——— Extra ——— */
 
+.section-extra {
+  justify-content: flex-start;
+  min-height: auto;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
 .extra-grid {
   display: grid;
   gap: 1.5rem;
   max-width: 52rem;
   width: 100%;
+}
+
+.crossword {
+  width: 100%;
+  max-width: 56rem;
+  margin-top: 3rem;
+}
+
+.crossword-title {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.crossword-embed {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.pm-attribution-div {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--muted);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding-top: 0.35rem;
+  width: 100%;
+}
+
+.pm-attribution-div a {
+  color: var(--muted);
+  text-decoration: underline;
 }
 
 .extra-grid > p {
