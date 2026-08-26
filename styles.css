@@ -288,25 +288,35 @@ ol {
   margin-top: 2rem;
 }
 
+.exp-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .exp-dates {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--muted);
-  margin-bottom: 0.375rem;
+  margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .exp-role {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.exp-org {
   font-family: var(--font-serif);
   font-weight: 700;
   font-style: italic;
   font-size: 0.92rem;
   margin-bottom: 0.2rem;
-}
-
-.exp-org {
-  font-size: 0.82rem;
-  color: var(--muted);
-  margin-bottom: 0.5rem;
 }
 
 .exp-list {
