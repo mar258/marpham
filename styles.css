@@ -249,27 +249,28 @@ ol {
 /* ——— Experience two-track ——— */
 
 .exp-tracks {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 0;
 }
 
-.exp-track-research {
-  padding-right: 2.5rem;
-  border-right: 1px solid var(--border);
+.exp-track-industry {
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
 }
 
-.exp-track-industry {
-  padding-left: 2.5rem;
+.exp-track-research {
+  padding-left: 0;
 }
 
 .track-label {
   font-family: var(--font-mono);
-  font-size: 0.63rem;
+  font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.625rem;
   margin-bottom: 1.75rem;
 }
 
@@ -623,24 +624,11 @@ ol {
   }
 
   .about-split,
-  .exp-tracks,
   .project-even,
   .project-odd,
   .extra-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-
-  .exp-track-research {
-    padding-right: 0;
-    padding-bottom: 2.5rem;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2.5rem;
-  }
-
-  .exp-track-industry {
-    padding-left: 0;
   }
 
   .project-odd .project-meta {
