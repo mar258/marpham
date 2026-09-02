@@ -18,41 +18,51 @@
   </head>
   <body>
     <nav class="dots-nav" aria-label="Page sections">
-      <button
-        type="button"
-        class="dot is-active"
-        data-section="about"
-        title="About"
-        aria-label="About"
-      ></button>
-      <button
-        type="button"
-        class="dot"
-        data-section="experience"
-        title="Experience"
-        aria-label="Experience"
-      ></button>
-      <button
-        type="button"
-        class="dot"
-        data-section="projects"
-        title="Projects"
-        aria-label="Projects"
-      ></button>
-      <button
-        type="button"
-        class="dot"
-        data-section="education"
-        title="Education"
-        aria-label="Education"
-      ></button>
-      <button
-        type="button"
-        class="dot"
-        data-section="extra"
-        title="Extra"
-        aria-label="Extra"
-      ></button>
+      <div class="dot-item is-active" data-section="about">
+        <span class="dot-label">About</span>
+        <button
+          type="button"
+          class="dot is-active"
+          data-section="about"
+          aria-label="About"
+        ></button>
+      </div>
+      <div class="dot-item" data-section="experience">
+        <span class="dot-label">Experience</span>
+        <button
+          type="button"
+          class="dot"
+          data-section="experience"
+          aria-label="Experience"
+        ></button>
+      </div>
+      <div class="dot-item" data-section="projects">
+        <span class="dot-label">Projects</span>
+        <button
+          type="button"
+          class="dot"
+          data-section="projects"
+          aria-label="Projects"
+        ></button>
+      </div>
+      <div class="dot-item" data-section="education">
+        <span class="dot-label">Education</span>
+        <button
+          type="button"
+          class="dot"
+          data-section="education"
+          aria-label="Education"
+        ></button>
+      </div>
+      <div class="dot-item" data-section="extra">
+        <span class="dot-label">Extra</span>
+        <button
+          type="button"
+          class="dot"
+          data-section="extra"
+          aria-label="Extra"
+        ></button>
+      </div>
     </nav>
 
     <div class="nav-backdrop" data-close-nav hidden></div>

@@ -2,6 +2,7 @@
   const sections = [...document.querySelectorAll("main .section[id]")];
   const navLinks = [...document.querySelectorAll(".nav-link")];
   const dots = [...document.querySelectorAll(".dot")];
+  const dotItems = [...document.querySelectorAll(".dot-item")];
   const menuToggle = document.querySelector(".menu-toggle");
   const mobileNav = document.querySelector(".mobile-nav");
   const backdrop = document.querySelector(".nav-backdrop");
@@ -13,6 +14,9 @@
     });
     dots.forEach((dot) => {
       dot.classList.toggle("is-active", dot.dataset.section === id);
+    });
+    dotItems.forEach((item) => {
+      item.classList.toggle("is-active", item.dataset.section === id);
     });
   }
 
