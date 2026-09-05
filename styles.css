@@ -72,6 +72,131 @@ ol {
   margin: 0;
 }
 
+/* ——— Scroll-grown plants (viewport bottom) ——— */
+
+.scroll-plants {
+  --grow: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.scroll-plant {
+  --height: 1;
+  --delay: 0;
+  --local-grow: clamp(0, calc((var(--grow) - var(--delay)) / (1 - var(--delay))), 1);
+  position: absolute;
+  bottom: 0;
+  width: calc(clamp(56px, 8.5vw, 96px) * var(--height));
+  opacity: calc(0.3 + var(--local-grow) * 0.6);
+}
+
+.scroll-plant[data-side="left"] {
+  left: var(--x);
+}
+
+.scroll-plant[data-side="right"] {
+  right: var(--x);
+}
+
+.scroll-plant-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  transform-origin: 50% 100%;
+}
+
+.plant-stem {
+  opacity: 0;
+  stroke: var(--stem);
+}
+
+.scroll-plants.is-ready .plant-stem {
+  opacity: 1;
+}
+
+.plant-leaf {
+  transform-box: fill-box;
+  transform: scale(0);
+  opacity: 0;
+}
+
+.plant-leaf path {
+  fill: var(--leaf);
+}
+
+.plant-leaf-1,
+.plant-leaf-3 {
+  transform-origin: right 85%;
+}
+
+.plant-leaf-2,
+.plant-leaf-4 {
+  transform-origin: left 85%;
+}
+
+.plant-leaf-1 {
+  transform: scale(clamp(0, calc((var(--local-grow) - 0.16) / 0.18), 1));
+  opacity: clamp(0, calc((var(--local-grow) - 0.16) / 0.12), 1);
+}
+
+.plant-leaf-2 {
+  transform: scale(clamp(0, calc((var(--local-grow) - 0.32) / 0.18), 1));
+  opacity: clamp(0, calc((var(--local-grow) - 0.32) / 0.12), 1);
+}
+
+.plant-leaf-3 {
+  transform: scale(clamp(0, calc((var(--local-grow) - 0.48) / 0.18), 1));
+  opacity: clamp(0, calc((var(--local-grow) - 0.48) / 0.12), 1);
+}
+
+.plant-leaf-4 {
+  transform: scale(clamp(0, calc((var(--local-grow) - 0.64) / 0.18), 1));
+  opacity: clamp(0, calc((var(--local-grow) - 0.64) / 0.12), 1);
+}
+
+.plant-bloom {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  transform: scale(clamp(0, calc((var(--local-grow) - 0.76) / 0.2), 1));
+  opacity: clamp(0, calc((var(--local-grow) - 0.76) / 0.14), 1);
+}
+
+.plant-bloom .petal-a {
+  fill: var(--petal-a);
+}
+
+.plant-bloom .petal-b {
+  fill: var(--petal-b);
+}
+
+.plant-bloom .bloom-core {
+  fill: var(--core);
+}
+
+.plant-bloom .bloom-center {
+  fill: var(--center);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-plants {
+    --grow: 1;
+  }
+
+  .scroll-plant {
+    opacity: 0.55;
+  }
+}
+
+@media (max-width: 860px) {
+  .scroll-plant {
+    width: calc(52px * var(--height));
+    opacity: calc(0.22 + var(--local-grow) * 0.45);
+  }
+}
+
 /* ——— Floating dots (desktop) ——— */
 
 .dots-nav {
