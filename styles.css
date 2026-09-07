@@ -41,6 +41,7 @@ body {
 }
 
 body {
+  position: relative;
   margin: 0;
   min-height: 100vh;
   min-height: 100svh;
@@ -191,9 +192,8 @@ ol {
 }
 
 @media (max-width: 860px) {
-  .scroll-plant {
-    width: calc(52px * var(--height));
-    opacity: calc(0.22 + var(--local-grow) * 0.45);
+  .scroll-plants {
+    display: none;
   }
 }
 
@@ -206,8 +206,11 @@ ol {
 @media (max-width: 860px) {
   .mobile-flowers {
     display: block;
-    position: fixed;
-    inset: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
@@ -217,19 +220,19 @@ ol {
     position: absolute;
     width: 9.5rem;
     height: auto;
-    opacity: 0.14;
-    filter: grayscale(0.15);
+    color: var(--text);
+    opacity: 0.12;
   }
 
   .mobile-flower-a {
-    top: 8%;
+    top: 6%;
     left: -1.5rem;
     width: 10.5rem;
     transform: rotate(-18deg);
   }
 
   .mobile-flower-b {
-    top: 32%;
+    top: 28%;
     right: -2rem;
     width: 8.5rem;
     transform: rotate(22deg);
@@ -237,7 +240,7 @@ ol {
   }
 
   .mobile-flower-c {
-    top: 58%;
+    top: 55%;
     left: -1rem;
     width: 9rem;
     transform: rotate(12deg) scaleX(-1);
