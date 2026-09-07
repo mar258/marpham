@@ -193,6 +193,17 @@ ol {
 
 @media (max-width: 860px) {
   .scroll-plants {
+    z-index: 0;
+  }
+
+  .scroll-plant {
+    width: calc(clamp(44px, 16vw, 72px) * var(--height));
+    opacity: calc(0.14 + var(--local-grow) * 0.22);
+  }
+
+  /* Keep only edge plants so they read as background, not overlay */
+  .scroll-plant:nth-child(3),
+  .scroll-plant:nth-child(6) {
     display: none;
   }
 }

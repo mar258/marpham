@@ -19,6 +19,20 @@
       history.replaceState(null, "", location.pathname + location.search);
     }
     window.scrollTo(0, 0);
+
+    // PuzzleMe autofocuses the embed on load; hold the page at the top briefly.
+    let unlockEmbedScroll = false;
+    const holdTop = () => {
+      if (!unlockEmbedScroll) window.scrollTo(0, 0);
+    };
+    window.addEventListener("scroll", holdTop, { passive: true });
+    window.addEventListener("load", () => {
+      window.scrollTo(0, 0);
+      window.setTimeout(() => {
+        unlockEmbedScroll = true;
+        window.removeEventListener("scroll", holdTop);
+      }, 1200);
+    });
   }
 
   function setActiveSection(id) {
@@ -56,7 +70,6 @@
   function scrollToSection(id) {
     const target = document.getElementById(id);
     if (!target) return;
-    if (id === "extra") loadCrossword();
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", `#${id}`);
     setActiveSection(id);
@@ -334,44 +347,6 @@
 
   window.addEventListener("resize", updatePlantGrowth, { passive: true });
   reduceMotion.addEventListener("change", updatePlantGrowth);
-
-  let crosswordLoading = false;
-  function loadCrossword() {
-    if (crosswordLoading || document.getElementById("pm-script")) return;
-    crosswordLoading = true;
-
-    const script = document.createElement("script");
-    script.id = "pm-script";
-    script.src = "https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js";
-    script.onload = () => {
-      window.PM_Config = window.PM_Config || {};
-      window.PM_Config.PM_BasePath = "https://puzzleme.amuselabs.com/pmm/";
-
-      if (typeof window.embedGame !== "function") return;
-
-      const scrollY = window.scrollY;
-      window.embedGame();
-      // PuzzleMe autofocuses the iframe; keep the user where they were.
-      window.scrollTo(0, scrollY);
-      requestAnimationFrame(() => window.scrollTo(0, scrollY));
-    };
-    document.body.appendChild(script);
-  }
-
-  const extraSection = document.getElementById("extra");
-  if (extraSection && "IntersectionObserver" in window) {
-    const crosswordObserver = new IntersectionObserver(
-      (entries, observer) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        loadCrossword();
-        observer.disconnect();
-      },
-      { rootMargin: "320px 0px" }
-    );
-    crosswordObserver.observe(extraSection);
-  } else if (extraSection) {
-    loadCrossword();
-  }
 
   if (keepDeepLink) {
     const writings = document.getElementById("writings");
