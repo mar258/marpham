@@ -36,10 +36,20 @@
       if (typeof window.embedGame !== "function") return;
 
       const y = window.scrollY;
+      const holdTop = y < 48;
       window.embedGame();
-      [0, 50, 150, 400].forEach((ms) => {
-        window.setTimeout(() => window.scrollTo(0, y), ms);
-      });
+
+      // PuzzleMe autofocuses the iframe. Pin top only on first load; never
+      // fight the user mid-scroll with repeated scroll restores.
+      if (holdTop) {
+        const pin = () => window.scrollTo(0, 0);
+        pin();
+        requestAnimationFrame(pin);
+        [50, 150, 400].forEach((ms) => window.setTimeout(pin, ms));
+      } else {
+        window.scrollTo(0, y);
+        requestAnimationFrame(() => window.scrollTo(0, y));
+      }
     };
     document.body.appendChild(script);
   }
@@ -84,6 +94,14 @@
     history.replaceState(null, "", `#${id}`);
     setActiveSection(id);
     closeMobileNav();
+  }
+
+  const topbarBrand = document.querySelector(".topbar-brand");
+  if (topbarBrand) {
+    topbarBrand.addEventListener("click", (event) => {
+      event.preventDefault();
+      scrollToSection("about");
+    });
   }
 
   navLinks.forEach((link) => {
@@ -358,19 +376,8 @@
   window.addEventListener("resize", updatePlantGrowth, { passive: true });
   reduceMotion.addEventListener("change", updatePlantGrowth);
 
-  const extraSection = document.getElementById("extra");
-  if (extraSection && "IntersectionObserver" in window) {
-    const crosswordObserver = new IntersectionObserver(
-      (entries, observer) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        loadCrossword();
-        observer.disconnect();
-      },
-      { rootMargin: "200px 0px" }
-    );
-    crosswordObserver.observe(extraSection);
-  }
-
+  // Preload after first paint so Extra is ready before the user scrolls there.
+  // Still call loadCrossword() from Extra nav as a fallback for fast clicks.
   if (keepDeepLink) {
     loadCrossword();
     const writings = document.getElementById("writings");
@@ -380,5 +387,11 @@
         setActiveSection("extra");
       });
     }
+  } else {
+    const scheduleIdle =
+      typeof window.requestIdleCallback === "function"
+        ? (cb) => window.requestIdleCallback(cb, { timeout: 2500 })
+        : (cb) => window.setTimeout(cb, 1000);
+    scheduleIdle(() => loadCrossword());
   }
 })();

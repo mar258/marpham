@@ -19,6 +19,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -50,7 +51,7 @@ body {
   font-weight: 400;
   line-height: 1.7;
   background: var(--bg);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 a {
@@ -193,16 +194,15 @@ ol {
 
 @media (max-width: 860px) {
   .scroll-plants {
-    /* Sit above page content so fixed plants stay visible, below topbar/nav */
-    z-index: 2;
+    z-index: 0;
   }
 
   .scroll-plant {
-    width: calc(clamp(48px, 18vw, 78px) * var(--height));
-    opacity: calc(0.28 + var(--local-grow) * 0.4);
+    width: calc(clamp(52px, 20vw, 84px) * var(--height));
+    opacity: calc(0.35 + var(--local-grow) * 0.45);
   }
 
-  /* Pull plants closer to the edges so they feel like background, not overlay */
+  /* Pull plants closer to the edges */
   .scroll-plant[data-side="left"] {
     left: calc(var(--x) * 0.35);
   }
@@ -681,6 +681,11 @@ ol {
   padding-bottom: 2rem;
 }
 
+/* Reserve puzzle height so lazy/idle embed doesn't shift the page mid-scroll. */
+.crossword-embed .pm-embed-div {
+  min-height: 700px;
+}
+
 .pm-attribution-div {
   font-family: var(--font-serif);
   font-size: 0.75rem;
@@ -799,6 +804,8 @@ ol {
   .main {
     position: relative;
     z-index: 1;
+    isolation: isolate;
+    background: transparent;
     padding-right: 0;
     padding-top: 52px;
   }
