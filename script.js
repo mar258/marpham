@@ -21,37 +21,78 @@
     window.scrollTo(0, 0);
   }
 
-  let crosswordLoaded = false;
-  function loadCrossword() {
-    if (crosswordLoaded) return;
-    crosswordLoaded = true;
+  let crosswordScriptReady = false;
+  let crosswordEmbedded = false;
+  let crosswordScriptPromise = null;
 
-    const script = document.createElement("script");
-    script.id = "pm-script";
-    script.src = "https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js";
-    script.onload = () => {
-      // Embed script resets PM_Config; set path after it loads, then start.
-      window.PM_Config = window.PM_Config || {};
-      window.PM_Config.PM_BasePath = "https://puzzleme.amuselabs.com/pmm/";
+  function ensureCrosswordScript() {
+    if (crosswordScriptReady && typeof window.embedGame === "function") {
+      return Promise.resolve();
+    }
+    if (crosswordScriptPromise) return crosswordScriptPromise;
+
+    crosswordScriptPromise = new Promise((resolve) => {
+      const existing = document.getElementById("pm-script");
+      const finish = () => {
+        window.PM_Config = window.PM_Config || {};
+        window.PM_Config.PM_BasePath = "https://puzzleme.amuselabs.com/pmm/";
+        crosswordScriptReady = true;
+        resolve();
+      };
+
+      if (existing) {
+        if (typeof window.embedGame === "function") {
+          finish();
+        } else {
+          existing.addEventListener("load", finish, { once: true });
+        }
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.id = "pm-script";
+      script.src = "https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js";
+      script.onload = finish;
+      document.body.appendChild(script);
+    });
+
+    return crosswordScriptPromise;
+  }
+
+  function embedCrossword() {
+    if (crosswordEmbedded) return;
+    crosswordEmbedded = true;
+
+    ensureCrosswordScript().then(() => {
       if (typeof window.embedGame !== "function") return;
 
       const y = window.scrollY;
-      const holdTop = y < 48;
+      const html = document.documentElement;
+      const prevOverflow = html.style.overflow;
+      // Freeze scrolling while PuzzleMe injects/focuses the iframe.
+      html.style.overflow = "hidden";
       window.embedGame();
 
-      // PuzzleMe autofocuses the iframe. Pin top only on first load; never
-      // fight the user mid-scroll with repeated scroll restores.
-      if (holdTop) {
-        const pin = () => window.scrollTo(0, 0);
-        pin();
-        requestAnimationFrame(pin);
-        [50, 150, 400].forEach((ms) => window.setTimeout(pin, ms));
-      } else {
+      const iframe = document.querySelector(".crossword-embed iframe");
+      if (iframe) iframe.setAttribute("tabindex", "-1");
+
+      const settle = () => {
+        if (iframe && document.activeElement === iframe) iframe.blur();
         window.scrollTo(0, y);
-        requestAnimationFrame(() => window.scrollTo(0, y));
-      }
-    };
-    document.body.appendChild(script);
+      };
+
+      requestAnimationFrame(() => {
+        settle();
+        window.setTimeout(() => {
+          settle();
+          html.style.overflow = prevOverflow;
+        }, 200);
+      });
+    });
+  }
+
+  function loadCrossword() {
+    embedCrossword();
   }
 
   function setActiveSection(id) {
@@ -376,8 +417,13 @@
   window.addEventListener("resize", updatePlantGrowth, { passive: true });
   reduceMotion.addEventListener("change", updatePlantGrowth);
 
-  // Preload after first paint so Extra is ready before the user scrolls there.
-  // Still call loadCrossword() from Extra nav as a fallback for fast clicks.
+  // Prefetch the PuzzleMe script after idle, but don't inject the iframe until
+  // Extra is nearby — embedding at top autofocuses and scrolls the page.
+  const scheduleIdle =
+    typeof window.requestIdleCallback === "function"
+      ? (cb) => window.requestIdleCallback(cb, { timeout: 2500 })
+      : (cb) => window.setTimeout(cb, 1000);
+
   if (keepDeepLink) {
     loadCrossword();
     const writings = document.getElementById("writings");
@@ -388,10 +434,23 @@
       });
     }
   } else {
-    const scheduleIdle =
-      typeof window.requestIdleCallback === "function"
-        ? (cb) => window.requestIdleCallback(cb, { timeout: 2500 })
-        : (cb) => window.setTimeout(cb, 1000);
-    scheduleIdle(() => loadCrossword());
+    scheduleIdle(() => {
+      ensureCrosswordScript();
+    });
+
+    const extra = document.getElementById("extra");
+    if (extra && "IntersectionObserver" in window) {
+      const crosswordObserver = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          loadCrossword();
+          crosswordObserver.disconnect();
+        },
+        { root: null, rootMargin: "120px 0px", threshold: 0 }
+      );
+      crosswordObserver.observe(extra);
+    } else {
+      scheduleIdle(() => loadCrossword());
+    }
   }
 })();
