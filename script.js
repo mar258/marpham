@@ -8,6 +8,19 @@
   const backdrop = document.querySelector(".nav-backdrop");
   const reveals = [...document.querySelectorAll(".reveal")];
 
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  const initialHash = location.hash.slice(1);
+  const keepDeepLink = initialHash === "writings";
+  if (!keepDeepLink) {
+    if (location.hash) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+    window.scrollTo(0, 0);
+  }
+
   function setActiveSection(id) {
     navLinks.forEach((link) => {
       link.classList.toggle("is-active", link.dataset.section === id);
@@ -320,4 +333,43 @@
 
   window.addEventListener("resize", updatePlantGrowth, { passive: true });
   reduceMotion.addEventListener("change", updatePlantGrowth);
+
+  let crosswordLoading = false;
+  function loadCrossword() {
+    if (crosswordLoading || document.getElementById("pm-script")) return;
+    crosswordLoading = true;
+
+    window.PM_Config = window.PM_Config || {};
+    window.PM_Config.PM_BasePath = "https://puzzleme.amuselabs.com/pmm/";
+
+    const script = document.createElement("script");
+    script.id = "pm-script";
+    script.src = "https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js";
+    document.body.appendChild(script);
+  }
+
+  const extraSection = document.getElementById("extra");
+  if (extraSection && "IntersectionObserver" in window) {
+    const crosswordObserver = new IntersectionObserver(
+      (entries, observer) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        loadCrossword();
+        observer.disconnect();
+      },
+      { rootMargin: "240px 0px" }
+    );
+    crosswordObserver.observe(extraSection);
+  } else if (extraSection) {
+    loadCrossword();
+  }
+
+  if (keepDeepLink) {
+    const writings = document.getElementById("writings");
+    if (writings) {
+      requestAnimationFrame(() => {
+        writings.scrollIntoView({ block: "start" });
+        setActiveSection("extra");
+      });
+    }
+  }
 })();
