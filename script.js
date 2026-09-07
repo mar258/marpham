@@ -56,6 +56,7 @@
   function scrollToSection(id) {
     const target = document.getElementById(id);
     if (!target) return;
+    if (id === "extra") loadCrossword();
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", `#${id}`);
     setActiveSection(id);
@@ -339,12 +340,21 @@
     if (crosswordLoading || document.getElementById("pm-script")) return;
     crosswordLoading = true;
 
-    window.PM_Config = window.PM_Config || {};
-    window.PM_Config.PM_BasePath = "https://puzzleme.amuselabs.com/pmm/";
-
     const script = document.createElement("script");
     script.id = "pm-script";
     script.src = "https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js";
+    script.onload = () => {
+      window.PM_Config = window.PM_Config || {};
+      window.PM_Config.PM_BasePath = "https://puzzleme.amuselabs.com/pmm/";
+
+      if (typeof window.embedGame !== "function") return;
+
+      const scrollY = window.scrollY;
+      window.embedGame();
+      // PuzzleMe autofocuses the iframe; keep the user where they were.
+      window.scrollTo(0, scrollY);
+      requestAnimationFrame(() => window.scrollTo(0, scrollY));
+    };
     document.body.appendChild(script);
   }
 
@@ -356,7 +366,7 @@
         loadCrossword();
         observer.disconnect();
       },
-      { rootMargin: "240px 0px" }
+      { rootMargin: "320px 0px" }
     );
     crosswordObserver.observe(extraSection);
   } else if (extraSection) {

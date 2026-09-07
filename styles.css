@@ -197,65 +197,6 @@ ol {
   }
 }
 
-/* ——— Mobile flower doodles (background) ——— */
-
-.mobile-flowers {
-  display: none;
-}
-
-@media (max-width: 860px) {
-  .mobile-flowers {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .mobile-flower {
-    position: absolute;
-    width: 9.5rem;
-    height: auto;
-    color: var(--text);
-    opacity: 0.12;
-  }
-
-  .mobile-flower-a {
-    top: 6%;
-    left: -1.5rem;
-    width: 10.5rem;
-    transform: rotate(-18deg);
-  }
-
-  .mobile-flower-b {
-    top: 28%;
-    right: -2rem;
-    width: 8.5rem;
-    transform: rotate(22deg);
-    opacity: 0.11;
-  }
-
-  .mobile-flower-c {
-    top: 55%;
-    left: -1rem;
-    width: 9rem;
-    transform: rotate(12deg) scaleX(-1);
-    opacity: 0.12;
-  }
-
-  .mobile-flower-d {
-    top: 82%;
-    right: -1.25rem;
-    width: 11rem;
-    transform: rotate(-28deg);
-    opacity: 0.13;
-  }
-}
-
 /* ——— Floating dots (desktop) ——— */
 
 .dots-nav {
