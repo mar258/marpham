@@ -19,20 +19,29 @@
       history.replaceState(null, "", location.pathname + location.search);
     }
     window.scrollTo(0, 0);
+  }
 
-    // PuzzleMe autofocuses the embed on load; hold the page at the top briefly.
-    let unlockEmbedScroll = false;
-    const holdTop = () => {
-      if (!unlockEmbedScroll) window.scrollTo(0, 0);
+  let crosswordLoaded = false;
+  function loadCrossword() {
+    if (crosswordLoaded) return;
+    crosswordLoaded = true;
+
+    const script = document.createElement("script");
+    script.id = "pm-script";
+    script.src = "https://puzzleme.amuselabs.com/pmm/js/puzzleme-embed.js";
+    script.onload = () => {
+      // Embed script resets PM_Config; set path after it loads, then start.
+      window.PM_Config = window.PM_Config || {};
+      window.PM_Config.PM_BasePath = "https://puzzleme.amuselabs.com/pmm/";
+      if (typeof window.embedGame !== "function") return;
+
+      const y = window.scrollY;
+      window.embedGame();
+      [0, 50, 150, 400].forEach((ms) => {
+        window.setTimeout(() => window.scrollTo(0, y), ms);
+      });
     };
-    window.addEventListener("scroll", holdTop, { passive: true });
-    window.addEventListener("load", () => {
-      window.scrollTo(0, 0);
-      window.setTimeout(() => {
-        unlockEmbedScroll = true;
-        window.removeEventListener("scroll", holdTop);
-      }, 1200);
-    });
+    document.body.appendChild(script);
   }
 
   function setActiveSection(id) {
@@ -70,6 +79,7 @@
   function scrollToSection(id) {
     const target = document.getElementById(id);
     if (!target) return;
+    if (id === "extra") loadCrossword();
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", `#${id}`);
     setActiveSection(id);
@@ -348,7 +358,21 @@
   window.addEventListener("resize", updatePlantGrowth, { passive: true });
   reduceMotion.addEventListener("change", updatePlantGrowth);
 
+  const extraSection = document.getElementById("extra");
+  if (extraSection && "IntersectionObserver" in window) {
+    const crosswordObserver = new IntersectionObserver(
+      (entries, observer) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        loadCrossword();
+        observer.disconnect();
+      },
+      { rootMargin: "200px 0px" }
+    );
+    crosswordObserver.observe(extraSection);
+  }
+
   if (keepDeepLink) {
+    loadCrossword();
     const writings = document.getElementById("writings");
     if (writings) {
       requestAnimationFrame(() => {

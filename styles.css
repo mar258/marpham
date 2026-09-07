@@ -193,18 +193,22 @@ ol {
 
 @media (max-width: 860px) {
   .scroll-plants {
-    z-index: 0;
+    /* Sit above page content so fixed plants stay visible, below topbar/nav */
+    z-index: 2;
   }
 
   .scroll-plant {
-    width: calc(clamp(44px, 16vw, 72px) * var(--height));
-    opacity: calc(0.14 + var(--local-grow) * 0.22);
+    width: calc(clamp(48px, 18vw, 78px) * var(--height));
+    opacity: calc(0.28 + var(--local-grow) * 0.4);
   }
 
-  /* Keep only edge plants so they read as background, not overlay */
-  .scroll-plant:nth-child(3),
-  .scroll-plant:nth-child(6) {
-    display: none;
+  /* Pull plants closer to the edges so they feel like background, not overlay */
+  .scroll-plant[data-side="left"] {
+    left: calc(var(--x) * 0.35);
+  }
+
+  .scroll-plant[data-side="right"] {
+    right: calc(var(--x) * 0.35);
   }
 }
 
